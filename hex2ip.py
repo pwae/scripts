@@ -1,12 +1,23 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
-import sys, binascii
+import binascii
+import sys
 
-ip = sys.argv[1]
-ip_parts = (ip[:2], ip[2:4], ip[4:6], ip[-2:])
-ip_quad = [0,0,0,0]
+def hex_to_ip(iphex):
+    quad = []
+    for i in range(0,7,2):
+        sec = str(ord(binascii.unhexlify(iphex[i:i+2])))
+        quad.append(sec)
 
-for i in range(0, 4):
-	ip_quad[i] = ord(binascii.unhexlify(ip_parts[i]))
+    return '.'.join(quad)
 
-print "%s is %s.%s.%s.%s" %  (ip,ip_quad[0], ip_quad[1], ip_quad[2], ip_quad[3])
+def main():
+    if len(sys.argv) > 1 and len(sys.argv[1]) == 8:
+        ip = sys.argv[1]
+        result = hex_to_ip(ip)
+        print "%s is %s" %  (ip, result)
+    else:
+        print 'Usage: hex2ip.py <hexip>'
+
+if __name__ == '__main__':
+    main()
